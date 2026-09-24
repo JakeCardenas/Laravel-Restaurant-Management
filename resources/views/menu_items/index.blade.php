@@ -1,46 +1,67 @@
 <!DOCTYPE html>
-<html 
+<html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Menu Items</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
-    <h1>Menu Items</h1>
+    <div class="topbar">Menu Manager</div>
 
-    @if(session('success'))
-        <div style="color: green; margin-bottom: 10px;">
-            {{ session('success') }}
+    <div class="container">
+        <div class="page-header">
+            <h1>Menu Items</h1>
+            <a class="btn" href="{{ route('menu_items.create') }}">+ Add New Menu Item</a>
         </div>
-    @endif
 
-    <p><a href="{{ route('menu_items.create') }}">Add New Menu Item</a></p>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Availability</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($menuItems as $menuItem)
-                <tr>
-                    <td>{{ $menuItem->name }}</td>
-                    <td>{{ $menuItem->category }}</td>
-                    <td>{{ $menuItem->price }}</td>
-                    <td>{{ $menuItem->description }}</td>
-                    <td>{{ $menuItem->availability }}</td>
-                    <td>
-                        <a href="{{ route('menu_items.edit', $menuItem->id) }}">Edit</a> |
-                        <form action="{{ route('menu_items.destroy', $menuItem->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
+        <div class="card table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Availability</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($menuItems as $menuItem)
+                        <tr>
+                            <td>{{ $menuItem->name }}</td>
+                            <td>{{ $menuItem->category }}</td>
+                            <td>{{ $menuItem->price }}</td>
+                            <td>{{ $menuItem->description }}</td>
+                            <td>
+                                <span class="badge {{ $menuItem->availability == 'Available' ? 'badge-available' : 'badge-unavailable' }}">
+                                    {{ $menuItem->availability }}
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <a class="btn btn-outline btn-sm" href="{{ route('menu_items.edit', $menuItem->id) }}">Edit</a>
+                                <form action="{{ route('menu_items.destroy', $menuItem->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="empty">No menu items yet.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

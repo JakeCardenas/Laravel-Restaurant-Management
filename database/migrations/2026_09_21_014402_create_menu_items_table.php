@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('name', 150);
             $table->string('category');
             $table->decimal('price', 8, 2);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('availability');
             $table->timestamps();
         });
