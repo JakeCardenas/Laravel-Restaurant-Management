@@ -14,4 +14,8 @@ class MenuItem extends Model
         'description',
         'availability',
     ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
 }

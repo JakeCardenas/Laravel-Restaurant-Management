@@ -10,7 +10,7 @@ class MenuItemController extends Controller
     //display gumagana na hehe akala ko nag error
     public function index()
     {
-        $menuItems = MenuItem::all();
+        $menuItems = MenuItem::latest()->get();
         return view('menu_items.index', compact('menuItems'));
     }
 
@@ -21,15 +21,7 @@ class MenuItemController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:150',
-            'category' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'availability' => 'required|string',
-        ]);
-
-        MenuItem::create($validatedData);
+        MenuItem::create($request->validate($this->rules()));
 
         return redirect()->route('menu_items.index')->with('success', 'Menu item created successfully.');
     }
@@ -41,15 +33,7 @@ class MenuItemController extends Controller
 
     public function update(Request $request, MenuItem $menu_item)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:150',
-            'category' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'availability' => 'required|string',
-        ]);
-
-        $menu_item->update($validatedData);
+        $menu_item->update($request->validate($this->rules()));
 
         return redirect()->route('menu_items.index')->with('success', 'Menu item updated successfully.');
     }
@@ -59,5 +43,17 @@ class MenuItemController extends Controller
         $menu_item->delete();
 
         return redirect()->route('menu_items.index')->with('success', 'Menu item deleted successfully.');
+    }
+
+    // Shared validation rules for store and update
+    private function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:150',
+            'category' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0|max:999999.99',
+            'description' => 'nullable|string',
+            'availability' => 'required|in:Available,Unavailable',
+        ];
     }
 }

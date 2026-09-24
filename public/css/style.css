@@ -32,6 +32,11 @@ body {
     letter-spacing: 0.3px;
 }
 
+.topbar a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .container {
     max-width: 1000px;
     margin: 32px auto;
@@ -68,6 +73,12 @@ h1 {
     margin: 0;
 }
 
+.subtitle {
+    margin: 2px 0 0;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
 /* Buttons & links */
 a {
     color: var(--purple);
@@ -91,6 +102,12 @@ button {
 .btn:hover,
 button:hover {
     background: var(--purple-dark);
+}
+
+.btn:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--purple);
+    outline-offset: 2px;
 }
 
 .btn-outline {
@@ -145,6 +162,7 @@ button:hover {
 /* Table */
 .table-wrap {
     overflow-x: auto;
+    padding: 0;
 }
 
 table {
@@ -169,12 +187,36 @@ th {
     letter-spacing: 0.4px;
 }
 
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
 tbody tr:hover {
-    background: var(--purple-light);
+    background: #faf8ff;
+}
+
+td.name {
+    font-weight: 600;
+}
+
+.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+td.description {
+    max-width: 280px;
+    color: var(--gray);
+    font-size: 0.9rem;
 }
 
 .actions {
     white-space: nowrap;
+}
+
+.actions > * + * {
+    margin-left: 6px;
 }
 
 .actions form {
@@ -242,8 +284,34 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
 }
 
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.optional {
+    color: var(--gray);
+    font-weight: 400;
+}
+
 .form-actions {
     display: flex;
     gap: 10px;
     margin-top: 24px;
+}
+
+@media (max-width: 560px) {
+    .container {
+        margin: 20px auto;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
 }
